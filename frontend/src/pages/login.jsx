@@ -21,30 +21,29 @@ function Login({ setIsLoggedIn }) {
 
   async function login() {
 
-    try {
+  try {
 
-      const response = await api.post("/login", formData)
+    const response = await api.post("/login", formData)
 
-      if (response.data.success) {
+    if (response.data.success) {
 
-        localStorage.setItem("loggedIn", "true")
+      localStorage.setItem("loggedIn", "true")
 
-        setIsLoggedIn(true)
+      setIsLoggedIn(true)
 
-      } else {
+    } else {
 
-        alert(response.data.message)
-
-      }
-
-    } catch (error) {
-
-      console.log(error)
+      alert(response.data.message)
 
     }
 
+  } catch (error) {
+
+    console.log(error)
+
   }
 
+}
 
   return (
 
@@ -53,7 +52,7 @@ function Login({ setIsLoggedIn }) {
       <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-8">
 
         <h1 className="text-4xl font-bold mb-8 text-center">
-          Colony Admin Login
+          COLONY ADMIN LOGIN
         </h1>
 
 
