@@ -71,14 +71,14 @@ function Dashboard() {
 
     <div>
 
-      <h1 className="text-4xl font-bold mb-8">
+      <h1 className="text-3xl md:text-4xl font-bold mb-8">
         Dashboard Overview
       </h1>
 
 
       {/* STATS */}
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
 
 
         {/* TOTAL OWNERS */}
@@ -89,7 +89,7 @@ function Dashboard() {
             Total Owners
           </p>
 
-          <h2 className="text-5xl font-bold mt-4">
+          <h2 className="text-3xl md:text-5xl font-bold mt-4">
             {stats.totalOwners}
           </h2>
 
@@ -104,17 +104,17 @@ function Dashboard() {
             Total Income
           </p>
 
-          <h2 className="text-5xl font-bold mt-4 text-green-400">
-            ₹ {stats.totalIncome}
+          <h2 className="text-3xl md:text-5xl font-bold mt-4 text-green-400">
+            ₹ {Number(stats.totalIncome).toLocaleString("en-IN")}
           </h2>
 
 
           <p className="mt-4 text-slate-400">
-            (Membership ₹{stats.membershipIncome})
+            (Membership ₹{Number(stats.membershipIncome).toLocaleString("en-IN")})
           </p>
 
           <p className="text-slate-400">
-            (Subscription ₹{stats.subscriptionIncome})
+            (Subscription ₹{Number(stats.subscriptionIncome).toLocaleString("en-IN")})
           </p>
 
         </div>
@@ -128,8 +128,8 @@ function Dashboard() {
             Total Expenses
           </p>
 
-          <h2 className="text-5xl font-bold mt-4 text-red-400">
-            ₹ {stats.totalExpenses}
+          <h2 className="text-3xl md:text-5xl font-bold mt-4 text-red-400">
+            ₹ {Number(stats.totalExpenses).toLocaleString("en-IN")}
           </h2>
 
         </div>
@@ -143,8 +143,8 @@ function Dashboard() {
             Remaining Balance
           </p>
 
-          <h2 className="text-5xl font-bold mt-4 text-blue-400">
-            ₹ {stats.balance}
+          <h2 className="text-3xl md:text-5xl font-bold mt-4 text-yellow-400">
+            ₹ {Number(stats.balance).toLocaleString("en-IN")}
           </h2>
 
         </div>
@@ -152,7 +152,7 @@ function Dashboard() {
 
         {/* PENDING SUBSCRIPTIONS */}
 
-        <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-xl col-span-2">
+        <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-xl md:col-span-2">
 
           <p className="text-slate-300">
             Pending Subscriptions

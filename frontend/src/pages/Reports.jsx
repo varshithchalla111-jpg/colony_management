@@ -51,7 +51,7 @@ function Reports() {
 
       {/* TOP STATS */}
 
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
 
         <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
 
@@ -73,7 +73,7 @@ function Reports() {
           </p>
 
           <h2 className="text-4xl font-bold mt-4 text-green-400">
-            ₹ {stats.totalIncome || 0}
+            ₹ {Number(stats.totalIncome || 0).toLocaleString("en-IN")}
           </h2>
 
         </div>
@@ -86,7 +86,7 @@ function Reports() {
           </p>
 
           <h2 className="text-4xl font-bold mt-4 text-red-400">
-            ₹ {stats.totalExpenses || 0}
+            ₹ {Number(stats.totalExpenses || 0).toLocaleString("en-IN")}
           </h2>
 
         </div>
@@ -98,8 +98,8 @@ function Reports() {
             Remaining Balance
           </p>
 
-          <h2 className="text-4xl font-bold mt-4 text-blue-400 break-all">
-            ₹ {stats.balance || 0}
+          <h2 className="text-2xl md:text-4xl font-bold mt-4 text-blue-400 break-words">
+            ₹ {Number(stats.balance || 0).toLocaleString("en-IN")}
           </h2>
 
         </div>

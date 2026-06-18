@@ -52,7 +52,7 @@ function Login({ setIsLoggedIn }) {
       <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-8">
 
         <h1 className="text-4xl font-bold mb-8 text-center">
-          COLONY ADMIN LOGIN
+          COLONY ADMIN LOGIN1
         </h1>
 
 

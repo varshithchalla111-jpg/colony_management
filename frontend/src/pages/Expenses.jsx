@@ -188,7 +188,7 @@ function Expenses() {
 
     <div>
 
-      <h1 className="text-4xl font-bold mb-8">
+      <h1 className="text-3xl md:text-4xl font-bold mb-8">
         Expenses Management
       </h1>
 
@@ -202,24 +202,31 @@ function Expenses() {
         </h2>
 
 
-        <div className="flex gap-4">
+      <div className="flex flex-col md:flex-row gap-4">
+
+        <div className="flex-1">
 
           <input
             type="number"
             value={currentBalance}
             onChange={(e) => setCurrentBalance(e.target.value)}
-            className="flex-1 bg-white/10 border border-white/10 rounded-xl p-4 outline-none text-white"
+            className="w-full bg-white/10 border border-white/10 rounded-xl p-4 outline-none text-white"
           />
 
-
-          <button
-            onClick={updateBalance}
-            className="bg-blue-500 hover:bg-blue-600 px-6 rounded-xl"
-          >
-            Update Balance
-          </button>
+          <p className="text-slate-400 text-sm mt-2">
+            ₹ {Number(currentBalance || 0).toLocaleString("en-IN")}
+          </p>
 
         </div>
+
+        <button
+          onClick={updateBalance}
+          className="bg-blue-500 hover:bg-blue-600 px-6 py-4 rounded-xl"
+        >
+          Update Balance
+        </button>
+
+      </div>
 
       </div>
 
@@ -235,7 +242,7 @@ function Expenses() {
         </h2>
 
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
 
           <input
@@ -315,7 +322,7 @@ function Expenses() {
 
               <div
                 key={expense._id}
-                className="bg-white/5 border border-white/10 rounded-2xl p-5 flex justify-between items-center"
+                className="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col md:flex-row md:justify-between md:items-center gap-4"
               >
 
                 <div>
@@ -339,7 +346,7 @@ function Expenses() {
                 </div>
 
 
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
 
                   <button
                     onClick={() => editExpense(expense)}

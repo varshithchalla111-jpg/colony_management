@@ -16,11 +16,9 @@ import Reports from "./pages/Reports"
 import Meetings from "./pages/Meetings"
 import Login from "./pages/Login"
 
-
-function Sidebar({ logout }) {
+function Sidebar({ logout, closeMenu }) {
 
   const location = useLocation()
-
 
   function getButtonClass(path) {
 
@@ -30,60 +28,51 @@ function Sidebar({ logout }) {
 
   }
 
-
   return (
 
-    <div className="w-64 bg-white/10 backdrop-blur-xl border-r border-white/10 p-6">
+    <div className="h-full bg-slate-900 text-white p-6">
 
       <h1 className="text-2xl font-bold mb-10">
         Colony Admin
       </h1>
 
+      <div className="space-y-3">
 
-      <div className="space-y-4">
-
-
-        <Link to="/">
+        <Link to="/" onClick={closeMenu}>
           <button className={getButtonClass("/")}>
             Dashboard
           </button>
         </Link>
 
-
-
-        <Link to="/owners">
+        <Link to="/owners" onClick={closeMenu}>
           <button className={getButtonClass("/owners")}>
             Owners
           </button>
         </Link>
 
-
-        <Link to="/payments">
+        <Link to="/payments" onClick={closeMenu}>
           <button className={getButtonClass("/payments")}>
             Payments
           </button>
         </Link>
 
-
-        <Link to="/expenses">
+        <Link to="/expenses" onClick={closeMenu}>
           <button className={getButtonClass("/expenses")}>
             Expenses
           </button>
         </Link>
 
-
-        <Link to="/reports">
+        <Link to="/reports" onClick={closeMenu}>
           <button className={getButtonClass("/reports")}>
             Reports
           </button>
         </Link>
 
-        <Link to="/meetings">
+        <Link to="/meetings" onClick={closeMenu}>
           <button className={getButtonClass("/meetings")}>
             Meetings
           </button>
         </Link>
-
 
         <button
           onClick={logout}
@@ -100,13 +89,13 @@ function Sidebar({ logout }) {
 
 }
 
-
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("loggedIn") === "true"
   )
 
+  const [menuOpen, setMenuOpen] = useState(false)
 
   function logout() {
 
@@ -116,45 +105,90 @@ function App() {
 
   }
 
-
   if (!isLoggedIn) {
 
     return <Login setIsLoggedIn={setIsLoggedIn} />
 
   }
 
-
   return (
 
     <BrowserRouter>
 
-      <div className="min-h-screen bg-slate-950 text-white flex">
+      <div className="min-h-screen bg-slate-950 text-white">
 
+        {/* MOBILE HEADER */}
 
-        {/* SIDEBAR */}
+        <div className="md:hidden flex items-center justify-between p-4 border-b border-white/10">
 
-        <Sidebar logout={logout} />
+          <h1 className="text-xl font-bold">
+            Colony Admin
+          </h1>
 
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="text-2xl"
+          >
+            ☰
+          </button>
 
-        {/* PAGE CONTENT */}
+        </div>
 
-        <div className="flex-1 p-8">
+        {/* MOBILE SIDEBAR */}
 
-          <Routes>
+        {menuOpen && (
 
-            <Route path="/" element={<Dashboard />} />
+          <div className="fixed inset-0 z-50 flex">
 
-            <Route path="/owners" element={<Owners />} />
+            <div className="w-64">
 
-            <Route path="/payments" element={<Payments />} />
+              <Sidebar
+                logout={logout}
+                closeMenu={() => setMenuOpen(false)}
+              />
 
-            <Route path="/expenses" element={<Expenses />} />
+            </div>
 
-            <Route path="/reports" element={<Reports />} />
+            <div
+              className="flex-1 bg-black/50"
+              onClick={() => setMenuOpen(false)}
+            />
 
-            <Route path="/meetings" element={<Meetings />} />
+          </div>
 
-          </Routes>
+        )}
+
+        <div className="flex">
+
+          {/* DESKTOP SIDEBAR */}
+
+          <div className="hidden md:block w-64 min-h-screen border-r border-white/10 bg-slate-900">
+
+            <Sidebar logout={logout} />
+
+          </div>
+
+          {/* PAGE CONTENT */}
+
+          <div className="flex-1 p-4 md:p-8 overflow-x-hidden">
+
+            <Routes>
+
+              <Route path="/" element={<Dashboard />} />
+
+              <Route path="/owners" element={<Owners />} />
+
+              <Route path="/payments" element={<Payments />} />
+
+              <Route path="/expenses" element={<Expenses />} />
+
+              <Route path="/reports" element={<Reports />} />
+
+              <Route path="/meetings" element={<Meetings />} />
+
+            </Routes>
+
+          </div>
 
         </div>
 
