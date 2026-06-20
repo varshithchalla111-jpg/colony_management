@@ -125,7 +125,7 @@ function Dashboard() {
         <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-xl">
 
           <p className="text-slate-300">
-            Total Expenses
+            Total Subscriptions
           </p>
 
           <h2 className="text-3xl md:text-5xl font-bold mt-4 text-red-400">
@@ -172,53 +172,7 @@ function Dashboard() {
 
 
 
-      {/* UNPAID OWNERS */}
-
-      <div className="mt-10 bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
-
-        <h2 className="text-2xl font-semibold mb-6 text-yellow-400">
-          Pending Yearly Subscription
-        </h2>
-
-
-        {unpaidOwners.length === 0 ? (
-
-          <p className="text-green-400">
-            All owners have paid 🎉
-          </p>
-
-        ) : (
-
-          <div className="space-y-4">
-
-            {unpaidOwners.map((owner) => (
-
-              <div
-                key={owner._id}
-                className="bg-white/5 border border-white/10 rounded-2xl p-4"
-              >
-
-                <h3 className="text-xl font-bold">
-                  {owner.name}
-                </h3>
-
-                <p className="text-slate-300">
-                  Plot: {owner.plot}
-                </p>
-
-                <p className="text-slate-300">
-                  Phone: {owner.phone}
-                </p>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        )}
-
-      </div>
+      
 
     </div>
 

@@ -9,11 +9,12 @@ function Meetings() {
     title: "",
     date: "",
     time: "",
-    hours: "",
-    minutes: ""
+    meetingMinutes: ""
   })
 
   const [editingId, setEditingId] = useState(null)
+
+  const [showHistory, setShowHistory] = useState(false)
 
   useEffect(() => {
     fetchMeetings()
@@ -39,13 +40,8 @@ function Meetings() {
 
     e.preventDefault()
 
-    const totalMinutes =
-      Number(formData.hours || 0) * 60 +
-      Number(formData.minutes || 0)
-
     const meetingData = {
-      ...formData,
-      totalMinutes
+      ...formData
     }
 
     try {
@@ -142,7 +138,7 @@ function Meetings() {
         className="bg-white/10 p-6 rounded-xl mb-8"
       >
 
-        <div className="grid md:grid-cols-5 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
 
           <input
             type="text"
@@ -184,31 +180,16 @@ function Meetings() {
             required
           />
 
-          <input
-            type="number"
-            placeholder="Hours"
-            value={formData.hours}
+          <textarea
+            placeholder="Meeting Minutes"
+            value={formData.meetingMinutes}
             onChange={(e) =>
               setFormData({
                 ...formData,
-                hours: e.target.value
+                meetingMinutes: e.target.value
               })
             }
-            className="bg-slate-800 p-3 rounded"
-            required
-          />
-
-          <input
-            type="number"
-            placeholder="Minutes"
-            value={formData.minutes}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                minutes: e.target.value
-              })
-            }
-            className="bg-slate-800 p-3 rounded"
+            className="bg-slate-800 p-3 rounded md:col-span-3 min-h-[150px]"
             required
           />
 
