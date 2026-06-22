@@ -353,33 +353,6 @@ def delete_meeting(meeting_id: str):
     }
 
 
-@app.get("/meeting-stats")
-def meeting_stats():
-
-    meetings = list(
-        meetings_collection.find()
-    )
-
-    total_minutes = 0
-
-    for meeting in meetings:
-
-        total_minutes += int(
-            meeting.get("totalMinutes", 0)
-        )
-
-    return {
-
-        "totalMeetings": len(meetings),
-
-        "totalMinutes": total_minutes,
-
-        "hours": total_minutes // 60,
-
-        "minutes": total_minutes % 60
-
-    }
-
 
 # =========================================
 # DASHBOARD STATS

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../services/api"
+import { Link } from "react-router-dom"
 
 function Expenses() {
 
@@ -303,9 +304,19 @@ function Expenses() {
 
       <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
 
-        <h2 className="text-2xl font-semibold mb-6">
-          Expenses History
+        <Link to="/expenses-register">
+          <button className="mb-6 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-xl">
+            View Expenses Register
+          </button>
+        </Link>
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Recent Expenses
         </h2>
+
+        <p className="text-slate-300 mb-6">
+          Click the button above to view, print, or download all expense records.
+        </p>
 
 
         {expenses.length === 0 ? (
@@ -318,7 +329,14 @@ function Expenses() {
 
           <div className="space-y-4">
 
-            {expenses.map((expense) => (
+            {[...expenses]
+              .sort(
+                (a, b) =>
+                  new Date(b.date) -
+                  new Date(a.date)
+              )
+              .slice(0, 3)
+              .map((expense) => (
 
               <div
                 key={expense._id}

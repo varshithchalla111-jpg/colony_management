@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../services/api"
+import { Link } from "react-router-dom"
 
 function Payments() {
 
@@ -13,7 +14,9 @@ function Payments() {
     ownerName: "",
     paymentType: "Membership",
     year: new Date().getFullYear(),
-    status: "Paid"
+    status: "Paid",
+    paymentMethod: "Cash",
+    paymentDate: new Date().toISOString().split("T")[0]
   })
 
 
@@ -131,7 +134,9 @@ function Payments() {
         ownerName: "",
         paymentType: "Membership",
         year: new Date().getFullYear(),
-        status: "Paid"
+        status: "Paid",
+        paymentMethod: "Cash",
+        paymentDate: new Date().toISOString().split("T")[0]
       })
 
     } catch (error) {
@@ -172,7 +177,11 @@ function Payments() {
       ownerName: payment.ownerName,
       paymentType: payment.paymentType,
       year: payment.year,
-      status: payment.status
+      status: payment.status,
+      paymentMethod: payment.paymentMethod || "Cash",
+      paymentDate:
+        payment.paymentDate ||
+        new Date().toISOString().split("T")[0]
     })
 
   }
@@ -183,7 +192,7 @@ function Payments() {
     <div>
 
       <h1 className="text-4xl font-bold mb-8">
-        Payments Management
+        Subscription Payments
       </h1>
 
 
@@ -193,7 +202,7 @@ function Payments() {
 
         <h2 className="text-2xl font-semibold mb-6">
 
-          {editingId ? "Edit Payment" : "Add Payment"}
+          {editingId ? "Edit Payment" : "Pay Subscription"}
 
         </h2>
 
@@ -257,6 +266,41 @@ function Payments() {
             className="bg-white/10 border border-white/10 rounded-xl p-4 outline-none text-white"
           />
 
+          {/* PAYMENT METHOD */}
+
+          <select
+            name="paymentMethod"
+            value={formData.paymentMethod}
+            onChange={handleChange}
+            className="bg-white/10 border border-white/10 rounded-xl p-4 outline-none text-white"
+>
+
+            <option className="text-black">
+              Cash
+            </option>
+
+            <option className="text-black">
+              UPI
+            </option>
+
+            <option className="text-black">
+              Bank Transfer
+                </option>
+
+          </select>
+
+
+          {/* PAYMENT DATE */}
+
+          <input
+            type="date"
+            name="paymentDate"
+            value={formData.paymentDate}
+            onChange={handleChange}
+            max={new Date().toISOString().split("T")[0]}
+            className="bg-white/10 border border-white/10 rounded-xl p-4 outline-none text-white"
+          />
+
 
           {/* AUTO AMOUNT */}
 
@@ -274,7 +318,7 @@ function Payments() {
           className="mt-6 bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl font-semibold transition"
         >
 
-          {editingId ? "Update Payment" : "Add Payment"}
+          {editingId ? "Update Payment" : "Pay Subscription"}
 
         </button>
 
@@ -286,29 +330,49 @@ function Payments() {
 
       <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
 
-        <h2 className="text-2xl font-semibold mb-6">
-          Payments History
+            
+        <Link to="/payments-register">
+          <button className="mb-6 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-xl">
+            View Payment Register
+          </button>
+        </Link>
+
+        <Link to="/unpaid-owners-register">
+          <button className="bg-red-500 hover:bg-red-600 px-6 py-3 rounded-xl">
+            View Unpaid Owners
+          </button>
+        </Link>
+
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Payment Register
         </h2>
 
+        <p className="text-slate-300">
+          Click the button above to view, print, or download all payment records.
+        </p>
 
-        {payments.length === 0 ? (
+        <h2 className="text-2xl font-semibold mt-8 mb-6">
+          Recent Payments
+        </h2>
 
-          <p className="text-slate-300">
-            No payments added yet
-          </p>
+        <div className="space-y-4">
 
-        ) : (
-
-          <div className="space-y-4">
-
-            {payments.map((payment) => (
+          {[...payments]
+            .sort(
+              (a, b) =>
+                new Date(b.paymentDate) -
+                new Date(a.paymentDate)
+            )
+            .slice(0, 3)
+            .map((payment) => (
 
               <div
                 key={payment._id}
                 className="bg-white/5 border border-white/10 rounded-2xl p-5 flex justify-between items-center"
               >
 
-                <div>
+              <div>
 
                   <h3 className="text-xl font-bold">
                     {payment.ownerName}
@@ -323,13 +387,10 @@ function Payments() {
                   </p>
 
                   <p className="text-slate-300">
-                    Year: {payment.year}
+                    Date: {payment.paymentDate}
                   </p>
 
                 </div>
-
-
-                {/* ACTION BUTTONS */}
 
                 <div className="flex gap-3">
 
@@ -339,7 +400,6 @@ function Payments() {
                   >
                     Edit
                   </button>
-
 
                   <button
                     onClick={() => deletePayment(payment._id)}
@@ -354,9 +414,7 @@ function Payments() {
 
             ))}
 
-          </div>
-
-        )}
+        </div>
 
       </div>
 

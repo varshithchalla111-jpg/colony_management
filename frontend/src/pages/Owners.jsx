@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../services/api"
+import { Link } from "react-router-dom"
 
 function Owners() {
 
@@ -9,7 +10,6 @@ function Owners() {
 
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
     familyMembers: "",
     plot: ""
   })
@@ -53,7 +53,6 @@ function Owners() {
 
     if (
       formData.name === "" ||
-      formData.phone === "" ||
       formData.plot === ""
     ) {
       alert("Please fill required fields")
@@ -84,7 +83,6 @@ function Owners() {
 
       setFormData({
         name: "",
-        phone: "",
         familyMembers: "",
         plot: ""
       })
@@ -125,7 +123,6 @@ function Owners() {
 
     setFormData({
       name: owner.name,
-      phone: owner.phone,
       familyMembers: owner.familyMembers,
       plot: owner.plot
     })
@@ -164,15 +161,6 @@ function Owners() {
             className="bg-white/10 border border-white/10 rounded-xl p-4 outline-none text-white"
           />
 
-
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone Number"
-            value={formData.phone}
-            onChange={handleChange}
-            className="bg-white/10 border border-white/10 rounded-xl p-4 outline-none text-white"
-          />
 
 
           <input
@@ -214,8 +202,14 @@ function Owners() {
 
       <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
 
+        <Link to="/owners-register">
+          <button className="mb-6 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-xl">
+            View Owners Register
+          </button>
+        </Link>
+
         <h2 className="text-2xl font-semibold mb-6">
-          Owners List
+          Recent Owners
         </h2>
 
 
@@ -229,7 +223,10 @@ function Owners() {
 
           <div className="space-y-4">
 
-            {owners.map((owner) => (
+            {[...owners]
+              .slice(-3)
+              .reverse()
+              .map((owner) => (
 
               <div
                 key={owner._id}
@@ -241,10 +238,6 @@ function Owners() {
                   <h3 className="text-xl font-bold">
                     {owner.name}
                   </h3>
-
-                  <p className="text-slate-300">
-                    Phone: {owner.phone}
-                  </p>
 
                   <p className="text-slate-300">
                     Family Members: {owner.familyMembers}

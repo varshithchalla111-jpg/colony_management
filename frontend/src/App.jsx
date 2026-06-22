@@ -12,9 +12,13 @@ import Dashboard from "./pages/Dashboard"
 import Owners from "./pages/Owners"
 import Payments from "./pages/Payments"
 import Expenses from "./pages/Expenses"
-import Reports from "./pages/Reports"
 import Meetings from "./pages/Meetings"
 import Login from "./pages/Login"
+import PaymentsRegister from "./pages/PaymentsRegister"
+import OwnersRegister from "./pages/OwnersRegister"
+import ExpensesRegister from "./pages/ExpensesRegister"
+import UnpaidOwnersRegister from "./pages/UnpaidOwnersRegister"
+import LandingPage from "./pages/LandingPage"
 
 function Sidebar({ logout, closeMenu }) {
 
@@ -38,12 +42,11 @@ function Sidebar({ logout, closeMenu }) {
 
       <div className="space-y-3">
 
-        <Link to="/" onClick={closeMenu}>
-          <button className={getButtonClass("/")}>
-            Dashboard
-          </button>
-        </Link>
-
+        <Link to="/dashboard" onClick={closeMenu}>
+  <button className={getButtonClass("/dashboard")}>
+    Dashboard
+  </button>
+</Link>
         <Link to="/owners" onClick={closeMenu}>
           <button className={getButtonClass("/owners")}>
             Owners
@@ -59,12 +62,6 @@ function Sidebar({ logout, closeMenu }) {
         <Link to="/expenses" onClick={closeMenu}>
           <button className={getButtonClass("/expenses")}>
             Expenses
-          </button>
-        </Link>
-
-        <Link to="/reports" onClick={closeMenu}>
-          <button className={getButtonClass("/reports")}>
-            Reports
           </button>
         </Link>
 
@@ -89,7 +86,9 @@ function Sidebar({ logout, closeMenu }) {
 
 }
 
-function App() {
+
+
+  function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("loggedIn") === "true"
@@ -101,15 +100,30 @@ function App() {
 
     localStorage.removeItem("loggedIn")
 
-    setIsLoggedIn(false)
+    window.location.href = "/"
 
   }
 
-  if (!isLoggedIn) {
+  
 
-    return <Login setIsLoggedIn={setIsLoggedIn} />
+if (!isLoggedIn) {
 
-  }
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        <Route path="/" element={<LandingPage />} />
+
+        <Route
+          path="/login"
+          element={<Login setIsLoggedIn={setIsLoggedIn} />}
+        />
+
+      </Routes>
+    </BrowserRouter>
+  )
+
+}
 
   return (
 
@@ -176,15 +190,25 @@ function App() {
 
               <Route path="/" element={<Dashboard />} />
 
+              <Route path="/dashboard" element={<Dashboard />} />
+
               <Route path="/owners" element={<Owners />} />
 
               <Route path="/payments" element={<Payments />} />
 
               <Route path="/expenses" element={<Expenses />} />
 
-              <Route path="/reports" element={<Reports />} />
-
               <Route path="/meetings" element={<Meetings />} />
+
+              <Route path="/payments-register" element={<PaymentsRegister />} />
+
+              <Route path="/owners-register" element={<OwnersRegister />} />
+
+              <Route path="/expenses-register" element={<ExpensesRegister />} />
+
+              <Route path="/unpaid-owners-register" element={<UnpaidOwnersRegister />} />
+
+              
 
             </Routes>
 

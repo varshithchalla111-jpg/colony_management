@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react"
 import api from "../services/api"
 
+
 function Meetings() {
+
+  const [activeTab, setActiveTab] = useState("add")
+
+  const [selectedType, setSelectedType] = useState(null)
 
   const [meetings, setMeetings] = useState([])
 
   const [formData, setFormData] = useState({
-    title: "",
+    meetingType: "General Body Meeting",
     date: "",
     time: "",
     meetingMinutes: ""
@@ -14,7 +19,7 @@ function Meetings() {
 
   const [editingId, setEditingId] = useState(null)
 
-  const [showHistory, setShowHistory] = useState(false)
+  
 
   useEffect(() => {
     fetchMeetings()
@@ -65,13 +70,14 @@ function Meetings() {
       }
 
       setFormData({
-        title: "",
-        date: "",
-        time: "",
-        hours: "",
-        minutes: ""
+        meetingType:
+          meeting.meetingType || "General Body Meeting",
+        date: meeting.date,
+        time: meeting.time,
+        meetingMinutes: meeting.meetingMinutes || ""
       })
 
+      
       fetchMeetings()
 
     } catch (error) {
@@ -110,20 +116,11 @@ function Meetings() {
       title: meeting.title,
       date: meeting.date,
       time: meeting.time,
-      hours: meeting.hours,
-      minutes: meeting.minutes
+      meetingMinutes: meeting.meetingMinutes || ""
     })
 
   }
 
-  const totalMinutes = meetings.reduce(
-    (sum, meeting) => sum + Number(meeting.totalMinutes || 0),
-    0
-  )
-
-  const totalHours = Math.floor(totalMinutes / 60)
-
-  const remainingMinutes = totalMinutes % 60
 
   return (
 
@@ -133,6 +130,37 @@ function Meetings() {
         Meetings
       </h1>
 
+      <div className="flex gap-4 mb-8">
+
+        <button
+          onClick={() => setActiveTab("add")}
+          className={`px-6 py-3 rounded-xl ${
+            activeTab === "add"
+              ? "bg-blue-500"
+              : "bg-white/10"
+          }`}
+        >
+          Add Meeting
+        </button>
+
+        <button
+          onClick={() => setActiveTab("view")}
+          className={`px-6 py-3 rounded-xl ${
+            activeTab === "view"
+              ? "bg-blue-500"
+              : "bg-white/10"
+          }`}
+        >
+          View Meetings
+        </button>
+
+      </div>
+
+
+
+
+
+      {activeTab === "add" && (
       <form
         onSubmit={handleSubmit}
         className="bg-white/10 p-6 rounded-xl mb-8"
@@ -140,19 +168,24 @@ function Meetings() {
 
         <div className="grid md:grid-cols-3 gap-4">
 
-          <input
-            type="text"
-            placeholder="Meeting Title"
-            value={formData.title}
+          <select
+            value={formData.meetingType}
             onChange={(e) =>
               setFormData({
                 ...formData,
-                title: e.target.value
+                meetingType: e.target.value
               })
             }
             className="bg-slate-800 p-3 rounded"
-            required
-          />
+          >
+
+            <option>General Body Meeting</option>
+
+            <option>Executive Body Meeting</option>
+
+              <option>Other Meeting</option>
+
+          </select>
 
           <input
             type="date"
@@ -163,6 +196,7 @@ function Meetings() {
                 date: e.target.value
               })
             }
+            max={new Date().toISOString().split("T")[0]}
             className="bg-slate-800 p-3 rounded"
             required
           />
@@ -203,76 +237,100 @@ function Meetings() {
 
       </form>
 
-      <div className="bg-white/10 p-6 rounded-xl mb-8">
+    )}
 
-        <h2 className="text-2xl font-bold mb-4">
-          Meeting Statistics
-        </h2>
 
-        <p>
-          Total Meetings: {meetings.length}
-        </p>
+    {activeTab === "view" && (
 
-        <p className="mt-2">
-          Total Meeting Time:
-          {" "}
-          {totalHours} Hours
-          {" "}
-          {remainingMinutes} Minutes
-        </p>
+  <div className="space-y-6">
 
-      </div>
+    <button
+      onClick={() => setSelectedType("General Body Meeting")}
+      className="block w-full text-left bg-white/10 p-4 rounded-xl font-bold"
+    >
+      General Body Meeting
+    </button>
 
-      <div className="space-y-4">
+    <button
+      onClick={() => setSelectedType("Executive Body Meeting")}
+      className="block w-full text-left bg-white/10 p-4 rounded-xl font-bold"
+    >
+      Executive Body Meeting
+    </button>
 
-        {meetings.map((meeting) => (
+    <button
+      onClick={() => setSelectedType("Other Meeting")}
+      className="block w-full text-left bg-white/10 p-4 rounded-xl font-bold"
+    >
+      Other Meeting
+    </button>
 
-          <div
-            key={meeting._id}
-            className="bg-white/10 p-5 rounded-xl flex justify-between items-center"
-          >
+    {selectedType && (
 
-            <div>
+  <div className="mt-6 space-y-4">
 
-              <h3 className="text-xl font-bold">
-                {meeting.title}
-              </h3>
+    <h2 className="text-2xl font-bold">
+      {selectedType}
+    </h2>
 
-              <p>
-                {meeting.date} | {meeting.time}
-              </p>
+    {meetings
+      .filter(
+        (meeting) =>
+          meeting.meetingType === selectedType
+      )
+      .sort(
+        (a, b) =>
+          new Date(`${b.date} ${b.time}`) -
+          new Date(`${a.date} ${a.time}`)
+      )
+      
+      .map((meeting) => (
 
-              <p>
-                {meeting.hours}h {meeting.minutes}m
-              </p>
+        <div
+          key={meeting._id}
+          className="bg-white/10 p-5 rounded-xl"
+        >
 
-            </div>
+          <p className="font-semibold">
+            {meeting.date} | {meeting.time}
+          </p>
 
-            <div className="space-x-2">
+          <p className="mt-3 whitespace-pre-wrap">
+            {meeting.meetingMinutes}
+          </p>
 
-              <button
-                onClick={() => editMeeting(meeting)}
-                className="bg-yellow-500 px-4 py-2 rounded"
-              >
-                Edit
-              </button>
+          <div className="flex gap-3 mt-4">
 
-              <button
-                onClick={() =>
-                  deleteMeeting(meeting._id)
-                }
-                className="bg-red-500 px-4 py-2 rounded"
-              >
-                Delete
-              </button>
+            <button
+              onClick={() => editMeeting(meeting)}
+              className="bg-yellow-500 px-4 py-2 rounded"
+            >
+              Edit
+            </button>
 
-            </div>
+            <button
+              onClick={() =>
+                deleteMeeting(meeting._id)
+              }
+              className="bg-red-500 px-4 py-2 rounded"
+            >
+              Delete
+            </button>
 
           </div>
 
-        ))}
+        </div>
 
-      </div>
+      ))}
+
+  </div>
+
+)}
+
+  </div>
+
+)}  
+
 
     </div>
 
